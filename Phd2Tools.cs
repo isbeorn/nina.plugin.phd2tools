@@ -31,10 +31,6 @@ namespace NINA.Plugin.Phd2Tools {
     public class Phd2Tools : PluginBase, INotifyPropertyChanged {
         private readonly IPluginOptionsAccessor pluginSettings;
         private readonly IProfileService profileService;
-        private readonly IImageSaveMediator imageSaveMediator;
-
-        // Implementing a file pattern
-        private readonly ImagePattern exampleImagePattern = new ImagePattern("$$EXAMPLEPATTERN$$", "An example of an image pattern implementation", "Phd2 Tools");
 
         [ImportingConstructor]
         public Phd2Tools(IProfileService profileService) {

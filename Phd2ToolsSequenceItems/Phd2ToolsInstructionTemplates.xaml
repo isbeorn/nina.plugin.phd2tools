@@ -1,0 +1,277 @@
+﻿<ResourceDictionary
+    x:Class="nina.plugin.phd2tools.Phd2ToolsSequenceItems.Phd2ToolsInstructionTemplates"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:nina.plugin.phd2tools.Phd2ToolsSequenceItems"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mini="clr-namespace:NINA.View.Sequencer.MiniSequencer;assembly=NINA.Sequencer"
+    xmlns:nina="clr-namespace:NINA.View.Sequencer;assembly=NINA.Sequencer"
+    xmlns:ninactrl="clr-namespace:NINA.CustomControlLibrary;assembly=NINA.CustomControlLibrary"
+    xmlns:rules="clr-namespace:NINA.Core.Utility.ValidationRules;assembly=NINA.Core"
+    xmlns:util="clr-namespace:NINA.Core.Utility;assembly=NINA.Core"
+    mc:Ignorable="d">
+
+    <GeometryGroup x:Key="PhdTools_Recording">
+        <PathGeometry Figures="M 366.667,566.667C 477.125,566.667 566.667,477.125 566.667,366.667C 566.667,256.208 477.125,166.667 366.667,166.667C 256.208,166.667 166.667,256.208 166.667,366.667C 166.667,477.125 256.208,566.667 366.667,566.667 Z M 366.667,500.339C 292.844,500.339 232.995,440.489 232.995,366.667C 232.995,292.844 292.844,232.995 366.667,232.995C 440.489,232.995 500.339,292.844 500.339,366.667C 500.339,440.489 440.489,500.339 366.667,500.339 Z " />
+        <PathGeometry Figures="M 366.667,733.333C 569.172,733.333 733.333,569.172 733.333,366.667C 733.333,164.161 569.172,0 366.667,0C 164.161,0 0,164.161 0,366.667C 0,569.172 164.161,733.333 366.667,733.333 Z M 366.667,666.437C 201.109,666.437 66.896,532.229 66.896,366.667C 66.896,201.109 201.109,66.896 366.667,66.896C 532.229,66.896 666.437,201.109 666.437,366.667C 666.437,532.229 532.229,666.437 366.667,666.437 Z " />
+    </GeometryGroup>
+
+    <GeometryGroup x:Key="PhdTools_Eye">
+        <PathGeometry Figures="M 451.391,266.667C 451.391,321.896 406.624,366.667 351.391,366.667C 296.167,366.667 251.396,321.896 251.396,266.667C 251.396,211.437 296.167,166.667 351.391,166.667C 406.624,166.667 451.391,211.437 451.391,266.667 Z " />
+        <PathGeometry Figures="M 351.411,33.3333C 202.156,33.3333 75.812,131.427 33.3334,266.667C 75.812,401.901 202.156,500 351.411,500C 500.661,500 627.005,401.901 669.484,266.667C 627.005,131.432 500.661,33.3333 351.411,33.3333 Z " />
+    </GeometryGroup>
+
+    <DataTemplate DataType="{x:Type local:ChangePHD2Parameters}">
+        <nina:SequenceBlockView>
+            <nina:SequenceBlockView.SequenceItemContent>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        ItemsSource="{Binding Source={util:EnumBindingSource {x:Type local:PHD2Parameter}}}"
+                        SelectedItem="{Binding Phd2Parameter}" />
+                    <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.DitherPixels}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ninactrl:UnitTextBox
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Unit="px">
+                            <TextBox.Text>
+                                <Binding Path="DitherPixels" UpdateSourceTrigger="LostFocus">
+                                    <Binding.ValidationRules>
+                                        <rules:GreaterZeroRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </ninactrl:UnitTextBox>
+                    </StackPanel>
+                    <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.DitherRAOnly}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <CheckBox
+                            Height="25"
+                            HorizontalAlignment="Left"
+                            IsChecked="{Binding DitherRAOnly}" />
+                    </StackPanel>
+                    <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.MinimumSettleTime}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ninactrl:UnitTextBox
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Unit="s">
+                            <TextBox.Text>
+                                <Binding Path="SettleTime" UpdateSourceTrigger="LostFocus">
+                                    <Binding.ValidationRules>
+                                        <rules:GreaterZeroRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </ninactrl:UnitTextBox>
+                    </StackPanel>
+                    <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.SettlePixelTolerance}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ninactrl:UnitTextBox
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Unit="px">
+
+                            <ninactrl:UnitTextBox.Text>
+                                <Binding Path="SettlePixels" UpdateSourceTrigger="LostFocus">
+                                    <Binding.ValidationRules>
+                                        <rules:GreaterZeroRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </ninactrl:UnitTextBox.Text>
+                        </ninactrl:UnitTextBox>
+                    </StackPanel>
+                    <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.SettleTimeout}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ninactrl:UnitTextBox
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Unit="s">
+                            <TextBox.Text>
+                                <Binding Path="SettleTimeout" UpdateSourceTrigger="LostFocus">
+                                    <Binding.ValidationRules>
+                                        <rules:GreaterZeroRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </ninactrl:UnitTextBox>
+                    </StackPanel>
+                    <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.ROIPercentage}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ninactrl:UnitTextBox
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Unit="%">
+                            <TextBox.Text>
+                                <Binding Path="RoiPct" UpdateSourceTrigger="LostFocus">
+                                    <Binding.ValidationRules>
+                                        <rules:GreaterThanZeroRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </ninactrl:UnitTextBox>
+                    </StackPanel>
+                </StackPanel>
+            </nina:SequenceBlockView.SequenceItemContent>
+        </nina:SequenceBlockView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:InterruptWhenRMSAbove}">
+        <nina:SequenceBlockView>
+            <nina:SequenceBlockView.SequenceItemContent>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Mode" />
+                    <ComboBox
+                        Width="75"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        ItemsSource="{Binding Source={util:EnumBindingSource {x:Type local:GuideInterrupteMode}}}"
+                        SelectedItem="{Binding Mode}" />
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="Threshold" />
+                    <ninactrl:UnitTextBox
+                        MinWidth="40"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="{Binding RmsThreshold}"
+                        Unit="&quot;" />
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Mode}" Value="{x:Static local:GuideInterrupteMode.RMS}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="Minimum Points" />
+                        <TextBox
+                            MinWidth="40"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="{Binding MinimumPoints}" />
+                    </StackPanel>
+                </StackPanel>
+            </nina:SequenceBlockView.SequenceItemContent>
+            <nina:SequenceBlockView.SequenceItemProgressContent>
+                <Grid Visibility="{Binding RmsInstance, Converter={StaticResource NullToVisibilityCollapsedConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Path
+                        Width="20"
+                        Margin="2.5"
+                        Data="{StaticResource PhdTools_Recording}"
+                        Fill="{StaticResource PrimaryBrush}"
+                        Stretch="Uniform" />
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Mode}" Value="{x:Static local:GuideInterrupteMode.Peak}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="{Binding RmsInstance.PeakRAText}" />
+                        <TextBlock Text="{Binding RmsInstance.PeakDecText}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Mode}" Value="{x:Static local:GuideInterrupteMode.RMS}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="{Binding RmsInstance.RAText}" />
+                        <TextBlock Text="{Binding RmsInstance.DecText}" />
+                        <TextBlock Text="{Binding RmsInstance.TotalText}" />
+                    </StackPanel>
+                </Grid>
+            </nina:SequenceBlockView.SequenceItemProgressContent>
+        </nina:SequenceBlockView>
+    </DataTemplate>
+</ResourceDictionary>

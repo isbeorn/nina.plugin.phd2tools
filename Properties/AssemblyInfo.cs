@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Phd2 Tools")]
 // [MANDATORY] A short description of your plugin
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Additional capabilities for controlling the PHD2 Guiding Software via N.I.N.A.")]
 
 // The following attributes are not required for the plugin per se, but are required by the official manifest meta data
 
@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © 2022 Stefan Berg")]
 
 // The minimum Version of N.I.N.A. that this plugin is compatible with
-[assembly: AssemblyMetadata("MinimumApplicationVersion", "3.0.0.0")]
+[assembly: AssemblyMetadata("MinimumApplicationVersion", "3.0.0.1031")]
 
 // The license your plugin code is using
 [assembly: AssemblyMetadata("License", "MPL-2.0")]
@@ -36,13 +36,13 @@ using System.Runtime.InteropServices;
 // The following attributes are optional for the official manifest meta data
 
 //[Optional] Your plugin homepage URL - omit if not applicaple
-[assembly: AssemblyMetadata("Homepage", "https://mypluginwebsite.com/")]
+[assembly: AssemblyMetadata("Homepage", "https://nighttime-imaging.eu/")]
 
 //[Optional] Common tags that quickly describe your plugin
-[assembly: AssemblyMetadata("Tags", "")]
+[assembly: AssemblyMetadata("Tags", "PHD2,Guiding")]
 
 //[Optional] A link that will show a log of all changes in between your plugin's versions
-[assembly: AssemblyMetadata("ChangelogURL", "https://mypluginsourcerepo.com/project/CHANGELOG.md")]
+[assembly: AssemblyMetadata("ChangelogURL", "https://bitbucket.org/Isbeorn/nina.plugin.phd2tools/src/net7/CHANGELOG.md")]
 
 //[Optional] The url to a featured logo that will be displayed in the plugin list next to the name
 [assembly: AssemblyMetadata("FeaturedImageURL", "")]

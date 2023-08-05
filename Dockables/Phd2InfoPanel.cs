@@ -5,12 +5,14 @@ using NINA.Core.Utility;
 using NINA.Core.Utility.Notification;
 using NINA.Equipment.Equipment.MyGuider;
 using NINA.Equipment.Equipment.MyGuider.PHD2;
+using NINA.Equipment.Equipment.MyGuider.PHD2.PhdEvents;
 using NINA.Equipment.Interfaces.Mediator;
 using NINA.Equipment.Interfaces.ViewModel;
 using NINA.Image.ImageAnalysis;
 using NINA.Image.ImageData;
 using NINA.Profile.Interfaces;
 using NINA.WPF.Base.ViewModel;
+using OxyPlot;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -41,9 +43,23 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
             //ImageGeometry.Freeze();
 
             this.guiderMediator = guiderMediator;
+            this.guiderMediator.GuideEvent += GuiderMediator_GuideEvent;
 
-            _ = Task.Run(() => Refresh(new CancellationToken()));
+            _ = Task.Run(Refresh);
         }
+
+        private void GuiderMediator_GuideEvent(object sender, Core.Interfaces.IGuideStep e) {
+            if (IsVisible && guiderMediator.GetInfo().Connected) {
+                if (guiderMediator.GetDevice() is PHD2Guider phd2Guider) {
+                    if (e is PhdEventGuideStep eventGuideStep) {
+                        HFD = (double)eventGuideStep.GetType().GetProperty("HFD").GetValue(eventGuideStep, null);
+                    }
+                    _ = Task.Run(() => GetPhd2Image(phd2Guider));
+                }
+            }
+        }
+
+        private CancellationTokenSource refreshTokenSource;
 
         [ObservableProperty]
         private BitmapSource starImage;
@@ -54,53 +70,80 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
         [ObservableProperty]
         private double exposureTime;
 
-        private async Task Refresh(CancellationToken ct) {
+        [ObservableProperty]
+        private double fWHM;
+
+        [ObservableProperty]
+        private List<DataPoint> midrowPoints;
+
+        [ObservableProperty]
+        private double hFD;
+
+        [ObservableProperty]
+        private ushort peak;
+
+        [ObservableProperty]
+        private DataPoint starCenter;
+
+        private async Task Refresh() {
             try {
-                while (!ct.IsCancellationRequested) {
-                    var interval = 1000;
-                    var start = DateTime.Now;
-                    try {
-                        if (IsVisible && guiderMediator.GetInfo().Connected) {
-                            if (guiderMediator.GetDevice() is PHD2Guider phd2Guider) {
-                                var exposureDurationResponse = await phd2Guider.SendMessage<GetExposureResponse>(new Phd2GetExposure());
-                                interval = exposureDurationResponse.result;
+                using (refreshTokenSource = new CancellationTokenSource()) {
+                    var ct = refreshTokenSource.Token;
+                    while (!ct.IsCancellationRequested) {
+                        var interval = 1000;
+                        var start = DateTime.Now;
+                        try {
+                            if (IsVisible && guiderMediator.GetInfo().Connected) {
+                                if (guiderMediator.GetDevice() is PHD2Guider phd2Guider) {
+                                    var exposureDurationResponse = await phd2Guider.SendMessage<GetExposureResponse>(new Phd2GetExposure());
+                                    interval = exposureDurationResponse.result;
 
-                                ExposureTime = TimeSpan.FromMilliseconds(interval).TotalSeconds;
+                                    ExposureTime = TimeSpan.FromMilliseconds(interval).TotalSeconds;
 
-                                AppState = await GetAppState(phd2Guider);
+                                    AppState = await GetAppState(phd2Guider);
 
-                                if (AppState == PhdAppState.SELECTED || AppState == PhdAppState.GUIDING || AppState == PhdAppState.LOSTLOCK || AppState == PhdAppState.CALIBRATING) {
-                                    StarImage = await GetPhd2Image(phd2Guider);
-                                } else {
-                                    StarImage = null;
+                                    if (AppState == PhdAppState.SELECTED || AppState == PhdAppState.CALIBRATING) {
+                                        await GetPhd2Image(phd2Guider);
+                                    } else if (AppState == PhdAppState.GUIDING || AppState == PhdAppState.LOSTLOCK) {
+                                        // Covered in GuideStep event
+                                    } else {
+                                        StarImage = null;
+                                    }
                                 }
                             }
+                        } catch (Exception ex) {
+                            Logger.Error(ex);
                         }
-                    } catch (Exception ex) {
-                        Logger.Error(ex);
-                    }
 
-                    var remaining = TimeSpan.FromMilliseconds(interval) - (DateTime.Now - start);
-                    if (remaining > TimeSpan.Zero) {
-                        await Task.Delay(remaining, ct);
+                        var remaining = TimeSpan.FromMilliseconds(interval) - (DateTime.Now - start);
+                        if (remaining > TimeSpan.Zero) {
+                            await Task.Delay(remaining, ct);
+                        }
                     }
                 }
             } catch { }
         }
 
-        private async Task<BitmapSource> GetPhd2Image(PHD2Guider phd2Guider) {
+        private async Task GetPhd2Image(PHD2Guider phd2Guider) {
             PhdImageResultResponse res = await phd2Guider.SendMessage<PhdImageResultResponse>(new Phd2GetStarImage());
             if (res.error == null && res.result != null && res.result.pixels != null) {
                 byte[] raw = Convert.FromBase64String(res.result.pixels.Trim('\0'));
                 ushort[] pixels = new ushort[raw.Length / 2];
                 Buffer.BlockCopy(raw, 0, pixels, 0, raw.Length);
 
+                var midrowdata = GetMidrow(pixels, res.result.width, res.result.height);
+                Peak = midrowdata.Max();
+                MidrowPoints = Enumerable.Range(0, midrowdata.Length).Select(x => new DataPoint(x, midrowdata[x])).ToList();
+                FWHM = CalculateFWHM(midrowdata);
+                StarCenter = new DataPoint(res.result.star_pos[0], res.result.star_pos[1]);
+
                 var iarr = new ImageArray(pixels);
                 var bmpSource = ImageUtility.CreateSourceFromArray(iarr, new ImageProperties(res.result.width, res.result.height, 16, false, 0), PixelFormats.Gray16);
                 bmpSource.Freeze();
-                return bmpSource;
+                StarImage = bmpSource;
+            } else {
+                StarImage = null;
             }
-            return null;
         }
 
         private async Task<string> GetAppState(PHD2Guider phd2Guider) {
@@ -110,19 +153,63 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
         }
 
         public void Dispose() {
+            try {
+                refreshTokenSource?.Cancel();
+            } catch { }
+            this.guiderMediator.GuideEvent -= GuiderMediator_GuideEvent;
+        }
+
+        private ushort[] GetMidrow(ushort[] pixels, int width, int height) {
+            ushort[] midrowdata = new ushort[width];
+            var halfrow = height / 2;
+
+            ushort maxValue = 0;
+            ushort minValue = ushort.MaxValue;
+
+            for (int i = 0; i < width; i++) {
+                var pixel = pixels[halfrow * width + i];
+                midrowdata[i] = pixel;
+
+                if (pixel > maxValue) {
+                    maxValue = pixel;
+                }
+                if (pixel < minValue) {
+                    minValue = pixel;
+                }
+            }
+            return midrowdata;
+        }
+
+        private double CalculateFWHM(ushort[] midrowdata) {
+            var minValue = midrowdata.Min();
+            var maxValue = midrowdata.Max();
+
+            var halfMax = (maxValue - minValue) / 2d + minValue;
+
+            int x1 = 0;
+            int x2 = 0;
+            int profval;
+            int profvalprec;
+
+            for (int i = 1; i < midrowdata.Length; i++) {
+                profval = midrowdata[i];
+                profvalprec = midrowdata[i - 1];
+                if (profvalprec <= halfMax && profval >= halfMax) {
+                    x1 = i;
+                } else if (profvalprec >= halfMax && profval <= halfMax) {
+                    x2 = i;
+                }
+            }
+
+            profval = midrowdata[x1];
+            profvalprec = midrowdata[x1 - 1];
+            float f1 = (float)x1 - (float)(profval - halfMax) / (float)(profval - profvalprec);
+            profval = midrowdata[x2];
+            profvalprec = midrowdata[x2 - 1];
+            float f2 = (float)x2 - (float)(profvalprec - halfMax) / (float)(profvalprec - profval);
+            return f2 - f1;
         }
     }
-
-    public class Phd2GetStarImage : Phd2Method {
-        public override string Id => "97";
-
-        public override string Method => "get_star_image";
-    }
-
-    //public class Phd2SizeParameter {
-    //    [JsonProperty(PropertyName = "size")]
-    //    public int Size { get; set; }
-    //}
 
     public class PhdImageResultResponse : PhdMethodResponse {
         public PhdImageResult result { get; set; }

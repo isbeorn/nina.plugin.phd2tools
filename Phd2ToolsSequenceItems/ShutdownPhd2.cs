@@ -5,7 +5,6 @@ using NINA.Core.Model;
 using NINA.Core.Utility;
 using NINA.Equipment.Equipment.MyGuider.PHD2;
 using NINA.Equipment.Interfaces.Mediator;
-using NINA.Plugin.Phd2Tools.Phd2ToolsTestCategory;
 using NINA.Sequencer.SequenceItem;
 using NINA.Sequencer.SequenceItem.Guider;
 using NINA.Sequencer.Validations;
@@ -21,7 +20,7 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
 
     [ExportMetadata("Name", "Shutdown PHD2")]
     [ExportMetadata("Description", "This item will disconnect from PHD2 and shutdown the PHD2 instance")]
-    [ExportMetadata("Icon", "")]
+    [ExportMetadata("Icon", "PowerSVG")]
     [ExportMetadata("Category", "Phd2 Tools")]
     [Export(typeof(ISequenceItem))]
     [JsonObject(MemberSerialization.OptIn)]
