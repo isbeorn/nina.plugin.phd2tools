@@ -37,17 +37,6 @@ pipelines:
               ## Copy relevant files to packaging folder
               - cp bin/Release/net7.0-windows/${PLUGIN_DLL_NAME}.dll ${BITBUCKET_CLONE_DIR}/packages/${PLUGIN_DLL_NAME}.dll
 
-              ##############################################################
-              ## START Add additonal required output based on your plugin ##
-              ##############################################################
-
-              - cp bin/Release/net7.0-windows/EmbedIO.dll ${BITBUCKET_CLONE_DIR}/packages/EmbedIO.dll
-              - cp bin/Release/net7.0-windows/Swan.Lite.dll ${BITBUCKET_CLONE_DIR}/packages/Swan.Lite.dll
-
-              ##############################################################
-              ## END   Add additonal required output based on your plugin ##
-              ##############################################################
-
             artifacts:
               - packages/**
               - artifacts/CreateNET7Manifest.ps1
