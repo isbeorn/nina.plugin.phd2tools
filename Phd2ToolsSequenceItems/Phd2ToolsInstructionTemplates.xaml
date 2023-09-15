@@ -22,6 +22,14 @@
         <PathGeometry Figures="M 351.411,33.3333C 202.156,33.3333 75.812,131.427 33.3334,266.667C 75.812,401.901 202.156,500 351.411,500C 500.661,500 627.005,401.901 669.484,266.667C 627.005,131.432 500.661,33.3333 351.411,33.3333 Z " />
     </GeometryGroup>
 
+    <DataTemplate DataType="{x:Type local:RestartWhenSaturated}">
+        <nina:SequenceBlockView>
+            <nina:SequenceBlockView.SequenceItemProgressContent>
+                <TextBlock Visibility="{Binding Saturated, Converter={StaticResource VisibilityConverter}}">Saturated!</TextBlock>
+            </nina:SequenceBlockView.SequenceItemProgressContent>
+        </nina:SequenceBlockView>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type local:ChangePHD2Parameters}">
         <nina:SequenceBlockView>
             <nina:SequenceBlockView.SequenceItemContent>

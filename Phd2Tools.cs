@@ -1,5 +1,4 @@
-﻿using NINA.Plugin.Phd2Tools.Properties;
-using NINA.Core.Model;
+﻿using NINA.Core.Model;
 using NINA.Core.Utility;
 using NINA.Image.ImageData;
 using NINA.Plugin;
@@ -16,7 +15,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Settings = NINA.Plugin.Phd2Tools.Properties.Settings;
+using Settings = nina.plugin.phd2tools.Properties.Settings;
 
 namespace NINA.Plugin.Phd2Tools {
 
