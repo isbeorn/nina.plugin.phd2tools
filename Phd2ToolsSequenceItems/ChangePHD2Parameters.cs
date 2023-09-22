@@ -89,24 +89,31 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
         }
 
         [ObservableProperty]
+        [property: JsonProperty]
         private PHD2Parameter phd2Parameter;
 
         [ObservableProperty]
+        [property: JsonProperty]
         private double ditherPixels;
 
         [ObservableProperty]
+        [property: JsonProperty]
         private bool ditherRAOnly;
 
         [ObservableProperty]
+        [property: JsonProperty]
         private double settlePixels;
 
         [ObservableProperty]
+        [property: JsonProperty]
         private int settleTime;
 
         [ObservableProperty]
+        [property: JsonProperty]
         private int settleTimeout;
 
         [ObservableProperty]
+        [property: JsonProperty]
         private int roiPct;
 
         public bool Validate() {

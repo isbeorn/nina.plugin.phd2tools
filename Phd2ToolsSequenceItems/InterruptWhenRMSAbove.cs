@@ -64,13 +64,18 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
             if (nextItem is IExposureItem exp) {
                 // Start recording and background work when exposure is about to start
                 activeRMSRecording = guiderMediator.StartRMSRecording();
-                var type = guiderMediator.GetType();
-                var GetRMSRecording = type.GetMethod("GetRMSRecording");
 
                 RmsInstance = guiderMediator.GetRMSRecording(activeRMSRecording);
                 exposureItem = exp;
 
-                _ = BackgroundWorker();
+                lock (workerLock) {
+                    try {
+                        workerCts?.Cancel();
+                        workerCts?.Dispose();
+                    } catch { }
+                    workerCts = new CancellationTokenSource();
+                    _ = BackgroundWorker(workerCts.Token);
+                }
             }
 
             // This trigger is not actively executing but rather a background watchdog
@@ -94,6 +99,7 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
             RmsInstance = null;
             try {
                 workerCts?.Cancel();
+                workerCts?.Dispose();
             } catch { }
         }
 
@@ -103,12 +109,15 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
         }
 
         [ObservableProperty]
+        [property: JsonProperty]
         private double rmsThreshold = 1;
 
         [ObservableProperty]
+        [property: JsonProperty]
         private int minimumPoints = 5;
 
         [ObservableProperty]
+        [property: JsonProperty]
         private GuideInterrupteMode mode = GuideInterrupteMode.Peak;
 
         [ObservableProperty]
@@ -117,14 +126,11 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
         private Guid activeRMSRecording;
         private IExposureItem exposureItem;
         private CancellationTokenSource workerCts;
+        private readonly object workerLock = new object();
 
-        private Task BackgroundWorker() {
-            try {
-                workerCts?.Cancel();
-            } catch { }
+        private Task BackgroundWorker(CancellationToken token) {
             return Task.Run(async () => {
-                workerCts = new CancellationTokenSource();
-                while (!workerCts.IsCancellationRequested) {
+                while (!token.IsCancellationRequested) {
                     try {
                         if (activeRMSRecording != Guid.Empty && guiderMediator.GetInfo().Connected) {
                             bool interruptExposure = false;
@@ -161,11 +167,11 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
                             if (interruptExposure) {
                                 if (exposureItem != null && exposureItem.Status == NINA.Core.Enum.SequenceEntityStatus.RUNNING) {
                                     Logger.Info("Interrupting running exposure item");
-                                    exposureItem.Skip();
+                                    exposureItem?.Skip();
                                 }
                             }
                         }
-                        await Task.Delay(1000, workerCts.Token);
+                        await Task.Delay(1000, token);
                     } catch (OperationCanceledException) {
                     } catch (Exception ex) {
                         Logger.Error(ex);
