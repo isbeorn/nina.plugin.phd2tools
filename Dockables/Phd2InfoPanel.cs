@@ -53,6 +53,10 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
                 if (guiderMediator.GetDevice() is PHD2Guider phd2Guider) {
                     if (e is PhdEventGuideStep eventGuideStep) {
                         HFD = (double)eventGuideStep.GetType().GetProperty("HFD").GetValue(eventGuideStep, null);
+                        StarMass = (double)eventGuideStep.GetType().GetProperty("StarMass").GetValue(eventGuideStep, null);
+                        SNR = (double)eventGuideStep.GetType().GetProperty("SNR").GetValue(eventGuideStep, null);
+
+
                     }
                     _ = Task.Run(() => GetPhd2Image(phd2Guider));
                 }
@@ -78,6 +82,12 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
 
         [ObservableProperty]
         private double hFD;
+
+        [ObservableProperty]
+        private double starMass;
+
+        [ObservableProperty]
+        private double sNR;
 
         [ObservableProperty]
         private ushort peak;

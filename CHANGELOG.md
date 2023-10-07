@@ -1,5 +1,6 @@
 ﻿# Phd2 Tools
-
+## 1.0.2.1
+- Added PHD2 guiding properties Star Mass and Guide Star SNR to the dockable view
 ## 1.0.2.0
 - Fixed: InterruptWhenRMSAbove and ChangePHD2Parameter did not save and restore user input
 - Fixed: Background worker of InterruptWhenRMSAbove was not cancelled properly
