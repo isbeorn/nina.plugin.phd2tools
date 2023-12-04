@@ -83,12 +83,38 @@
                         <ColumnDefinition Width="Auto" SharedSizeGroup="Column1" />
                         <ColumnDefinition SharedSizeGroup="Column2" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="HFD:" />
+                    <TextBlock Text="Guide Star HFD:" />
                     <StackPanel
                         Grid.Column="1"
                         Margin="5,0,0,0"
                         Orientation="Horizontal">
                         <TextBlock Text="{Binding HFD, StringFormat=\{0:0.00\}}" />
+                    </StackPanel>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Column1" />
+                        <ColumnDefinition SharedSizeGroup="Column2" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Guide Star SNR:" />
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        Orientation="Horizontal">
+                        <TextBlock Text="{Binding SNR, StringFormat=\{0:0.00\}}" />
+                    </StackPanel>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Column1" />
+                        <ColumnDefinition SharedSizeGroup="Column2" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Guide Star Mass:" />
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        Orientation="Horizontal">
+                        <TextBlock Text="{Binding StarMass, StringFormat=\{0:0.00\}}" />
                     </StackPanel>
                 </Grid>
             </StackPanel>

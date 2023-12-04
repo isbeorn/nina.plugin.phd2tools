@@ -3,6 +3,9 @@
 ## 1.0.3.0
 - Added an `Exposure Time` option to the `Change PHD2 Parameters` instruction. This allows users to adjust the guider's exposure time.
 
+## 1.0.2.1
+- Added PHD2 guiding properties Star Mass and Guide Star SNR to the dockable view
+
 ## 1.0.2.0
 - Fixed: InterruptWhenRMSAbove and ChangePHD2Parameter did not save and restore user input
 - Fixed: Background worker of InterruptWhenRMSAbove was not cancelled properly
