@@ -39,6 +39,7 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
             settleTime = profileService.ActiveProfile.GuiderSettings.SettleTime;
             settleTimeout = profileService.ActiveProfile.GuiderSettings.SettleTimeout;
             roiPct = profileService.ActiveProfile.GuiderSettings.PHD2ROIPct;
+            exposureTime = 1;
         }
 
         public ChangePHD2Parameters(ChangePHD2Parameters copyMe) : this(copyMe.guiderMediator, copyMe.profileService) {
@@ -56,6 +57,7 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
                 SettlePixels = this.SettlePixels,
                 SettleTime = this.SettleTime,
                 RoiPct = this.RoiPct,
+                ExposureTime = this.ExposureTime
             };
         }
 
@@ -83,6 +85,16 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
                     }
                 case PHD2Parameter.ROIPercentage: {
                         profileService.ActiveProfile.GuiderSettings.PHD2ROIPct = RoiPct;
+                        break;
+                    }
+                case PHD2Parameter.ExposureTime: {
+                        if (guiderMediator.GetDevice() is PHD2Guider phd2Guider) {
+                            int exposureMillis = (int)(ExposureTime * 1000);
+                            var exposureDurationResponse = await phd2Guider.SendMessage<GenericPhdMethodResponse>(new Phd2SetExposure() { Parameters = new int[] { exposureMillis } });
+                            if (!string.IsNullOrEmpty(exposureDurationResponse?.error?.message)) {
+                                Logger.Error("Error setting PHD2 exposure time: " + exposureDurationResponse.error.message);
+                            }
+                        }
                         break;
                     }
             }
@@ -115,6 +127,10 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
         [ObservableProperty]
         [property: JsonProperty]
         private int roiPct;
+
+        [ObservableProperty]
+        [property: JsonProperty]
+        private double exposureTime;
 
         public bool Validate() {
             var i = new List<string>();
@@ -158,6 +174,9 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
         SettleTimeout,
 
         [Description("LblPHD2ROIPct")]
-        ROIPercentage
+        ROIPercentage,
+
+        [Description("LblExposureTime")]
+        ExposureTime
     }
 }

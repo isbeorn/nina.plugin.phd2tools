@@ -181,6 +181,31 @@
                             </TextBox.Text>
                         </ninactrl:UnitTextBox>
                     </StackPanel>
+                    <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.ExposureTime}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ninactrl:UnitTextBox
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Unit="%">
+                            <TextBox.Text>
+                                <Binding Path="ExposureTime" UpdateSourceTrigger="LostFocus">
+                                    <Binding.ValidationRules>
+                                        <rules:GreaterThanZeroRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </ninactrl:UnitTextBox>
+                    </StackPanel>
                 </StackPanel>
             </nina:SequenceBlockView.SequenceItemContent>
         </nina:SequenceBlockView>
