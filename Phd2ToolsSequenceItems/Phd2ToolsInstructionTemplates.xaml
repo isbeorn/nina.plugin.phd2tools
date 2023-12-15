@@ -196,7 +196,7 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Unit="%">
+                            Unit="s">
                             <TextBox.Text>
                                 <Binding Path="ExposureTime" UpdateSourceTrigger="LostFocus">
                                     <Binding.ValidationRules>
@@ -209,6 +209,166 @@
                 </StackPanel>
             </nina:SequenceBlockView.SequenceItemContent>
         </nina:SequenceBlockView>
+    </DataTemplate>
+
+    <DataTemplate x:Key="nina.plugin.phd2tools.Phd2ToolsSequenceItems.ChangePHD2Parameters_Mini">
+        <mini:MiniSequenceItem>
+            <mini:MiniSequenceItem.SequenceItemContent>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Text="- " />
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Text="{Binding Phd2Parameter}" />
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Text=": " />
+                    <StackPanel
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.DitherPixels}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Text="{Binding DitherPixels}" />
+                        <TextBlock Text=" px" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.DitherRAOnly}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Text="{Binding DitherRAOnly}" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.MinimumSettleTime}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Text="{Binding SettleTime}" />
+                        <TextBlock Text=" s" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.SettlePixelTolerance}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Text="{Binding SettlePixels}" />
+                        <TextBlock Text=" px" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.SettleTimeout}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Text="{Binding SettleTimeout}" />
+                        <TextBlock Text=" s" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.ROIPercentage}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Text="{Binding RoiPct}" />
+                        <TextBlock Text=" %" />
+                    </StackPanel>
+                    <StackPanel
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Phd2Parameter}" Value="{x:Static local:PHD2Parameter.ExposureTime}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Text="{Binding ExposureTime}" />
+                        <TextBlock Text=" s" />
+                    </StackPanel>
+                </StackPanel>
+            </mini:MiniSequenceItem.SequenceItemContent>
+        </mini:MiniSequenceItem>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:InterruptWhenRMSAbove}">

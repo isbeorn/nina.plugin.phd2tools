@@ -1,5 +1,9 @@
 ﻿# Phd2 Tools
 
+## 1.0.3.1
+- Fixed unit symbol for Change PHD2 Parameter for Exposure Time
+- Added mini sequencer details for Change PHD2 Parameter 
+
 ## 1.0.3.0
 - Added an `Exposure Time` option to the `Change PHD2 Parameters` instruction. This allows users to adjust the guider's exposure time.
 
