@@ -55,8 +55,6 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
                         HFD = (double)eventGuideStep.GetType().GetProperty("HFD").GetValue(eventGuideStep, null);
                         StarMass = (double)eventGuideStep.GetType().GetProperty("StarMass").GetValue(eventGuideStep, null);
                         SNR = (double)eventGuideStep.GetType().GetProperty("SNR").GetValue(eventGuideStep, null);
-
-
                     }
                     _ = Task.Run(() => GetPhd2Image(phd2Guider));
                 }
@@ -148,7 +146,7 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
                 StarCenter = new DataPoint(res.result.star_pos[0], res.result.star_pos[1]);
 
                 var iarr = new ImageArray(pixels);
-                var bmpSource = ImageUtility.CreateSourceFromArray(iarr, new ImageProperties(res.result.width, res.result.height, 16, false, 0), PixelFormats.Gray16);
+                var bmpSource = ImageUtility.CreateSourceFromArray(iarr, new ImageProperties(res.result.width, res.result.height, 16, false, 0, 0), PixelFormats.Gray16);
                 bmpSource.Freeze();
                 StarImage = bmpSource;
             } else {
