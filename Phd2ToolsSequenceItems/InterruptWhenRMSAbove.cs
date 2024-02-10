@@ -57,10 +57,6 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
         }
 
         public override bool ShouldTrigger(ISequenceItem previousItem, ISequenceItem nextItem) {
-            if (previousItem is IExposureItem) {
-                StopRecording();
-            }
-
             if (nextItem is IExposureItem exp) {
                 // Start recording and background work when exposure is about to start
                 activeRMSRecording = guiderMediator.StartRMSRecording();
@@ -76,6 +72,8 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
                     workerCts = new CancellationTokenSource();
                     _ = BackgroundWorker(workerCts.Token);
                 }
+            } else {
+                StopRecording();
             }
 
             // This trigger is not actively executing but rather a background watchdog
@@ -97,15 +95,27 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
             }
             activeRMSRecording = Guid.Empty;
             RmsInstance = null;
-            try {
-                workerCts?.Cancel();
-                workerCts?.Dispose();
-            } catch { }
+            lock (workerLock) {
+                try {
+                    workerCts?.Cancel();
+                    workerCts?.Dispose();
+                } catch { }
+            }
         }
 
         public override void SequenceBlockFinished() {
             StopRecording();
             base.SequenceBlockFinished();
+        }
+
+        public override void SequenceBlockTeardown() {
+            StopRecording();
+            base.SequenceBlockTeardown();
+        }
+
+        public override void Teardown() {
+            StopRecording();
+            base.Teardown();
         }
 
         [ObservableProperty]
@@ -130,14 +140,14 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
 
         private Task BackgroundWorker(CancellationToken token) {
             return Task.Run(async () => {
-                while (!token.IsCancellationRequested) {
+                while (!token.IsCancellationRequested && this.Parent?.Status == NINA.Core.Enum.SequenceEntityStatus.RUNNING) {
                     try {
                         if (activeRMSRecording != Guid.Empty && guiderMediator.GetInfo().Connected) {
                             bool interruptExposure = false;
 
                             if (Mode == GuideInterrupteMode.Peak) {
                                 if (Math.Abs(RmsInstance.PeakRA) * RmsInstance.Scale > RmsThreshold) {
-                                    Notification.ShowInformation($"RA peak above threshold ({Math.Round(rmsInstance.PeakRA * rmsInstance.Scale, 2)} / {RmsThreshold}) - Interrupting current exposure");
+                                    Notification.ShowInformation($"RA peak above threshold ({Math.Round(RmsInstance.PeakRA * RmsInstance.Scale, 2)} / {RmsThreshold}) - Interrupting current exposure");
                                     Logger.Info($"RA peak above threshold ({RmsInstance.PeakRA * RmsInstance.Scale} / {RmsThreshold})");
                                     interruptExposure = true;
                                 }
@@ -149,7 +159,7 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
                             } else if (Mode == GuideInterrupteMode.RMS && RmsInstance.DataPoints > MinimumPoints) {
                                 if (Math.Abs(RmsInstance.Total) * RmsInstance.Scale > RmsThreshold) {
                                     Notification.ShowInformation($"Total RMS above threshold ({Math.Round(RmsInstance.Total * RmsInstance.Scale, 2)} / {RmsThreshold}) - Interrupting current exposure");
-                                    Logger.Info($"Total RMS above threshold ({rmsInstance.Total * rmsInstance.Scale} / {RmsThreshold})");
+                                    Logger.Info($"Total RMS above threshold ({RmsInstance.Total * RmsInstance.Scale} / {RmsThreshold})");
                                     interruptExposure = true;
                                 }
                                 if (Math.Abs(RmsInstance.RA) * RmsInstance.Scale > RmsThreshold) {

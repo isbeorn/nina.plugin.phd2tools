@@ -1,5 +1,8 @@
 ﻿# Phd2 Tools
 
+## 1.0.3.2
+- Add some additional guards for the background task in "Interrupt when RMS Above" Trigger to not run more than once
+
 ## 1.0.3.1
 - Fixed unit symbol for Change PHD2 Parameter for Exposure Time
 - Added mini sequencer details for Change PHD2 Parameter 
