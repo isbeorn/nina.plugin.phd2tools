@@ -10,6 +10,7 @@ using NINA.Equipment.Interfaces.Mediator;
 using NINA.Equipment.Interfaces.ViewModel;
 using NINA.Image.ImageAnalysis;
 using NINA.Image.ImageData;
+using NINA.Image.Interfaces;
 using NINA.Profile.Interfaces;
 using NINA.WPF.Base.ViewModel;
 using OxyPlot;
@@ -33,9 +34,10 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
     [Export(typeof(IDockableVM))]
     public partial class Phd2InfoPanel : DockableVM {
         private IGuiderMediator guiderMediator;
+        private readonly IImageDataFactory imageDataFactory;
 
         [ImportingConstructor]
-        public Phd2InfoPanel(IProfileService profileService, IGuiderMediator guiderMediator) : base(profileService) {
+        public Phd2InfoPanel(IProfileService profileService, IGuiderMediator guiderMediator, IImageDataFactory imageDataFactory) : base(profileService) {
             Title = "PHD2 Info";
             //var dict = new ResourceDictionary();
             //dict.Source = new Uri("NINA.Plugin.Phd2Tools;component/DataTemplates.xaml", UriKind.RelativeOrAbsolute);
@@ -43,6 +45,7 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
             //ImageGeometry.Freeze();
 
             this.guiderMediator = guiderMediator;
+            this.imageDataFactory = imageDataFactory;
             this.guiderMediator.GuideEvent += GuiderMediator_GuideEvent;
 
             _ = Task.Run(Refresh);
@@ -133,24 +136,30 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
         }
 
         private async Task GetPhd2Image(PHD2Guider phd2Guider) {
-            PhdImageResultResponse res = await phd2Guider.SendMessage<PhdImageResultResponse>(new Phd2GetStarImage());
-            if (res.error == null && res.result != null && res.result.pixels != null) {
-                byte[] raw = Convert.FromBase64String(res.result.pixels.Trim('\0'));
-                ushort[] pixels = new ushort[raw.Length / 2];
-                Buffer.BlockCopy(raw, 0, pixels, 0, raw.Length);
+            try {
+                PhdImageResultResponse res = await phd2Guider.SendMessage<PhdImageResultResponse>(new Phd2GetStarImage());
+                if (res.error == null && res.result != null && res.result.pixels != null) {
+                    byte[] raw = Convert.FromBase64String(res.result.pixels.Trim('\0'));
+                    ushort[] pixels = new ushort[raw.Length / 2];
+                    Buffer.BlockCopy(raw, 0, pixels, 0, raw.Length);
 
-                var midrowdata = GetMidrow(pixels, res.result.width, res.result.height);
-                Peak = midrowdata.Max();
-                MidrowPoints = Enumerable.Range(0, midrowdata.Length).Select(x => new DataPoint(x, midrowdata[x])).ToList();
-                FWHM = CalculateFWHM(midrowdata);
-                StarCenter = new DataPoint(res.result.star_pos[0], res.result.star_pos[1]);
+                    var midrowdata = GetMidrow(pixels, res.result.width, res.result.height);
+                    Peak = midrowdata.Max();
+                    MidrowPoints = Enumerable.Range(0, midrowdata.Length).Select(x => new DataPoint(x, midrowdata[x])).ToList();
+                    FWHM = CalculateFWHM(midrowdata);
+                    StarCenter = new DataPoint(res.result.star_pos[0], res.result.star_pos[1]);
 
-                var iarr = new ImageArray(pixels);
-                var bmpSource = ImageUtility.CreateSourceFromArray(iarr, new ImageProperties(res.result.width, res.result.height, 16, false, 0, 0), PixelFormats.Gray16);
-                bmpSource.Freeze();
-                StarImage = bmpSource;
-            } else {
-                StarImage = null;
+                    var iarr = new ImageArray(pixels);
+
+                    var baseData = imageDataFactory.CreateBaseImageData(iarr, res.result.width, res.result.height, 16, false, new ImageMetaData());
+                    var render = baseData.RenderImage();
+                    var bmpSource = await ImageUtility.Stretch(render, 0.25, -2.8);
+
+                    StarImage = bmpSource;
+                } else {
+                    StarImage = null;
+                }
+            } catch (Exception) {
             }
         }
 

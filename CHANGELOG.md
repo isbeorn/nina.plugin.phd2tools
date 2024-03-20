@@ -1,5 +1,8 @@
 ﻿# Phd2 Tools
 
+## 1.0.4.0
+- Autostretch the star image preview in the dock panel
+
 ## 1.0.3.2
 - Add some additional guards for the background task in "Interrupt when RMS Above" Trigger to not run more than once
 
