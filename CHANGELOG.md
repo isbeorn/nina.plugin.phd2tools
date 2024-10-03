@@ -1,5 +1,8 @@
 ﻿# Phd2 Tools
 
+## 1.0.4.1
+- Restrict guide star image query to be at most every 2 seconds in case the guiding exposure time is shorter
+
 ## 1.0.4.0
 - Autostretch the star image preview in the dock panel
 

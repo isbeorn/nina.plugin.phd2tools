@@ -55,11 +55,10 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
             if (IsVisible && guiderMediator.GetInfo().Connected) {
                 if (guiderMediator.GetDevice() is PHD2Guider phd2Guider) {
                     if (e is PhdEventGuideStep eventGuideStep) {
-                        HFD = (double)eventGuideStep.GetType().GetProperty("HFD").GetValue(eventGuideStep, null);
-                        StarMass = (double)eventGuideStep.GetType().GetProperty("StarMass").GetValue(eventGuideStep, null);
-                        SNR = (double)eventGuideStep.GetType().GetProperty("SNR").GetValue(eventGuideStep, null);
+                        HFD = eventGuideStep.StarMass;
+                        StarMass = eventGuideStep.StarMass;
+                        SNR = eventGuideStep.SNR;
                     }
-                    _ = Task.Run(() => GetPhd2Image(phd2Guider));
                 }
             }
         }
@@ -101,22 +100,20 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
                 using (refreshTokenSource = new CancellationTokenSource()) {
                     var ct = refreshTokenSource.Token;
                     while (!ct.IsCancellationRequested) {
-                        var interval = 1000;
-                        var start = DateTime.Now;
+                        var interval = 2000;
+                        var start = DateTime.UtcNow;
                         try {
                             if (IsVisible && guiderMediator.GetInfo().Connected) {
                                 if (guiderMediator.GetDevice() is PHD2Guider phd2Guider) {
                                     var exposureDurationResponse = await phd2Guider.SendMessage<GetExposureResponse>(new Phd2GetExposure());
-                                    interval = exposureDurationResponse.result;
+                                    interval = Math.Max(exposureDurationResponse.result, 2000);
 
-                                    ExposureTime = TimeSpan.FromMilliseconds(interval).TotalSeconds;
+                                    ExposureTime = TimeSpan.FromMilliseconds(exposureDurationResponse.result).TotalSeconds;
 
                                     AppState = await GetAppState(phd2Guider);
 
-                                    if (AppState == PhdAppState.SELECTED || AppState == PhdAppState.CALIBRATING) {
+                                    if (AppState == PhdAppState.SELECTED || AppState == PhdAppState.CALIBRATING || AppState == PhdAppState.GUIDING || AppState == PhdAppState.LOSTLOCK) {
                                         await GetPhd2Image(phd2Guider);
-                                    } else if (AppState == PhdAppState.GUIDING || AppState == PhdAppState.LOSTLOCK) {
-                                        // Covered in GuideStep event
                                     } else {
                                         StarImage = null;
                                     }
@@ -126,7 +123,7 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
                             Logger.Error(ex);
                         }
 
-                        var remaining = TimeSpan.FromMilliseconds(interval) - (DateTime.Now - start);
+                        var remaining = TimeSpan.FromMilliseconds(interval) - (DateTime.UtcNow - start);
                         if (remaining > TimeSpan.Zero) {
                             await Task.Delay(remaining, ct);
                         }
