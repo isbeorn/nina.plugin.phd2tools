@@ -55,7 +55,7 @@ namespace NINA.Plugin.Phd2Tools.Dockables {
             if (IsVisible && guiderMediator.GetInfo().Connected) {
                 if (guiderMediator.GetDevice() is PHD2Guider phd2Guider) {
                     if (e is PhdEventGuideStep eventGuideStep) {
-                        HFD = eventGuideStep.StarMass;
+                        HFD = eventGuideStep.HFD;
                         StarMass = eventGuideStep.StarMass;
                         SNR = eventGuideStep.SNR;
                     }

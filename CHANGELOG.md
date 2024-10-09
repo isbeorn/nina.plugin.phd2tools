@@ -1,5 +1,8 @@
 ﻿# Phd2 Tools
 
+## 1.0.4.2
+- HFD is now displayed correctly again
+
 ## 1.0.4.1
 - Restrict guide star image query to be at most every 2 seconds in case the guiding exposure time is shorter
 
