@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 // The following attributes are not required for the plugin per se, but are required by the official manifest meta data
 
 // Your name
-[assembly: AssemblyCompany("Stefan Berg")]
+[assembly: AssemblyCompany("Stefan Berg @isbeorn")]
 // The product name that this plugin is part of
 [assembly: AssemblyProduct("Phd2 Tools")]
 [assembly: AssemblyCopyright("Copyright © 2022 Stefan Berg")]
