@@ -1,5 +1,4 @@
-﻿
-using CsvHelper;
+﻿using CsvHelper;
 using Newtonsoft.Json;
 using NINA.Core.Locale;
 using NINA.Core.Model;
@@ -28,13 +27,11 @@ using static System.Net.Mime.MediaTypeNames;
 namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
 
     [ExportMetadata("Name", "Settle before Exposure")]
-    [ExportMetadata("Description", "This trigger will ensure guiding has settled before starting anexposure")]
+    [ExportMetadata("Description", "This trigger will ensure guiding has settled before starting an exposure")]
     [ExportMetadata("Icon", "PhdTools_Settle")]
     [ExportMetadata("Category", "Phd2 Tools")]
     [Export(typeof(ISequenceTrigger))]
     [JsonObject(MemberSerialization.OptIn)]
-
-
     public class Phd2SettleTrigger : SequenceTrigger, IValidatable {
 
         [ImportingConstructor]
