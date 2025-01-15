@@ -488,8 +488,8 @@
     </DataTemplate>
 
     <DataTemplate x:Key="nina.plugin.phd2tools.Phd2ToolsSequenceItems.Phd2SettleTrigger_Mini">
-        <mini:MiniSequenceItem>
-        </mini:MiniSequenceItem>
+        <mini:MiniTrigger>
+        </mini:MiniTrigger>
     </DataTemplate>
     
 </ResourceDictionary>
