@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.0.4.2")]
-[assembly: AssemblyFileVersion("1.0.4.2")]
+[assembly: AssemblyVersion("1.0.5.0")]
+[assembly: AssemblyFileVersion("1.0.5.0")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Phd2 Tools")]
@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 // The following attributes are not required for the plugin per se, but are required by the official manifest meta data
 
 // Your name
-[assembly: AssemblyCompany("Stefan Berg")]
+[assembly: AssemblyCompany("Stefan Berg @isbeorn")]
 // The product name that this plugin is part of
 [assembly: AssemblyProduct("Phd2 Tools")]
 [assembly: AssemblyCopyright("Copyright © 2022 Stefan Berg")]

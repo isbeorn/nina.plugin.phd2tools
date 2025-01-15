@@ -24,6 +24,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel
+                x:Name="LabelPanel"
                 Margin="0,0,5,5"
                 Grid.IsSharedSizeScope="True"
                 Orientation="Vertical">
@@ -118,12 +119,16 @@
                     </StackPanel>
                 </Grid>
             </StackPanel>
-            <Viewbox Grid.Column="1" Stretch="Uniform">
+            <Viewbox
+                Grid.Column="1"
+                Height="{Binding ActualHeight, ElementName=LabelPanel}"
+                HorizontalAlignment="Left"
+                Stretch="Uniform">
                 <Canvas Width="{Binding StarImage.Width}" Height="{Binding StarImage.Height}">
                     <Canvas.Background>
                         <VisualBrush>
                             <VisualBrush.Visual>
-                                <Image Source="{Binding StarImage}" />
+                                <Image Source="{Binding StarImage}" Stretch="Uniform" />
                             </VisualBrush.Visual>
                         </VisualBrush>
                     </Canvas.Background>
