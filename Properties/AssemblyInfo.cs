@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.0.5.1")]
-[assembly: AssemblyFileVersion("1.0.5.1")]
+[assembly: AssemblyVersion("1.0.5.2")]
+[assembly: AssemblyFileVersion("1.0.5.2")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Phd2 Tools")]
@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Stefan Berg @isbeorn")]
 // The product name that this plugin is part of
 [assembly: AssemblyProduct("Phd2 Tools")]
-[assembly: AssemblyCopyright("Copyright © 2022 Stefan Berg")]
+[assembly: AssemblyCopyright("Copyright © 2022-2025 Stefan Berg")]
 
 // The minimum Version of N.I.N.A. that this plugin is compatible with
 [assembly: AssemblyMetadata("MinimumApplicationVersion", "3.0.0.2001")]
@@ -31,18 +31,18 @@ using System.Runtime.InteropServices;
 // The url to the license
 [assembly: AssemblyMetadata("LicenseURL", "https://www.mozilla.org/en-US/MPL/2.0/")]
 // The repository where your pluggin is hosted
-[assembly: AssemblyMetadata("Repository", "https://mypluginsourcerepo.com/project")]
+[assembly: AssemblyMetadata("Repository", "https://github.com/isbeorn/nina.plugin.phd2tools")]
 
 // The following attributes are optional for the official manifest meta data
 
 //[Optional] Your plugin homepage URL - omit if not applicaple
-[assembly: AssemblyMetadata("Homepage", "https://nighttime-imaging.eu/")]
+[assembly: AssemblyMetadata("Homepage", "https://www.patreon.com/stefanberg/")]
 
 //[Optional] Common tags that quickly describe your plugin
 [assembly: AssemblyMetadata("Tags", "PHD2,Guiding")]
 
 //[Optional] A link that will show a log of all changes in between your plugin's versions
-[assembly: AssemblyMetadata("ChangelogURL", "https://bitbucket.org/Isbeorn/nina.plugin.phd2tools/src/net7/CHANGELOG.md")]
+[assembly: AssemblyMetadata("ChangelogURL", "https://github.com/isbeorn/nina.plugin.phd2tools/blob/net7/CHANGELOG.md")]
 
 //[Optional] The url to a featured logo that will be displayed in the plugin list next to the name
 [assembly: AssemblyMetadata("FeaturedImageURL", "")]
