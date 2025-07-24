@@ -1,5 +1,8 @@
 ﻿# Phd2 Tools
 
+## 1.0.5.3
+- ChangePHD2Parameters now properly updates its validation
+
 ## 1.0.5.0
 - Added new Settle Trigger and Instruction
 - Restrict the vertical size of star preview image

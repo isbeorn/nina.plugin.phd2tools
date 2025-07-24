@@ -7,6 +7,7 @@ using NINA.Equipment.Equipment.MyGuider.PHD2;
 using NINA.Equipment.Interfaces.Mediator;
 using NINA.Profile.Interfaces;
 using NINA.Sequencer.SequenceItem;
+using NINA.Sequencer.Validations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +25,7 @@ namespace nina.plugin.phd2tools.Phd2ToolsSequenceItems {
     [ExportMetadata("Category", "Phd2 Tools")]
     [Export(typeof(ISequenceItem))]
     [JsonObject(MemberSerialization.OptIn)]
-    public partial class ChangePHD2Parameters : SequenceItem {
+    public partial class ChangePHD2Parameters : SequenceItem, IValidatable {
         private IGuiderMediator guiderMediator;
         private IProfileService profileService;
 
