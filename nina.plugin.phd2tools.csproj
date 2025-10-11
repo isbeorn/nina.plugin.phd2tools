@@ -2,10 +2,16 @@
   <PropertyGroup>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <AssemblyTitle>Phd2 Tools</AssemblyTitle>
+    <Title>Phd2 Tools</Title>
+    <Authors>Stefan Berg @isbeorn</Authors>
+    <Product>Phd2 Tools</Product>
+    <Description>Additional capabilities for controlling the PHD2 Guiding Software via N.I.N.A.</Description>
+    <Copyright>Copyright ©  2024-2025</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NINA.Plugin" Version="3.0.0.2001-beta" />

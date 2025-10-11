@@ -7,21 +7,21 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.0.5.3")]
-[assembly: AssemblyFileVersion("1.0.5.3")]
+//[assembly: AssemblyVersion("1.0.5.3")]
+//[assembly: AssemblyFileVersion("1.0.5.3")]
 
 // [MANDATORY] The name of your plugin
-[assembly: AssemblyTitle("Phd2 Tools")]
+//[assembly: AssemblyTitle("Phd2 Tools")]
 // [MANDATORY] A short description of your plugin
-[assembly: AssemblyDescription("Additional capabilities for controlling the PHD2 Guiding Software via N.I.N.A.")]
+//[assembly: AssemblyDescription("Additional capabilities for controlling the PHD2 Guiding Software via N.I.N.A.")]
 
 // The following attributes are not required for the plugin per se, but are required by the official manifest meta data
 
 // Your name
-[assembly: AssemblyCompany("Stefan Berg @isbeorn")]
+//[assembly: AssemblyCompany("Stefan Berg @isbeorn")]
 // The product name that this plugin is part of
-[assembly: AssemblyProduct("Phd2 Tools")]
-[assembly: AssemblyCopyright("Copyright © 2022-2025 Stefan Berg")]
+//[assembly: AssemblyProduct("Phd2 Tools")]
+//[assembly: AssemblyCopyright("Copyright © 2022-2025 Stefan Berg")]
 
 // The minimum Version of N.I.N.A. that this plugin is compatible with
 [assembly: AssemblyMetadata("MinimumApplicationVersion", "3.0.0.2001")]
@@ -58,7 +58,7 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 // [Unused]
-[assembly: AssemblyConfiguration("")]
+//[assembly: AssemblyConfiguration("")]
 // [Unused]
 [assembly: AssemblyTrademark("")]
 // [Unused]

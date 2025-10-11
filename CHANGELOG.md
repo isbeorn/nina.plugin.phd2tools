@@ -1,5 +1,8 @@
 ﻿# Phd2 Tools
 
+## 1.0.6.0
+- Reworked the dock panel to keep a single tcp connection open to PhD2 instead of opening a new one on every request. This should improve performance and reliability.
+
 ## 1.0.5.3
 - ChangePHD2Parameters now properly updates its validation
 
