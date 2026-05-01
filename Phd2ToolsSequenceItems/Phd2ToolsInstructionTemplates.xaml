@@ -491,5 +491,65 @@
         <mini:MiniTrigger>
         </mini:MiniTrigger>
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type local:Phd2PauseGuidingInstruction}">
+        <nina:SequenceBlockView>
+            <nina:SequenceBlockView.SequenceItemContent>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Pause Looping" />
+                    <CheckBox
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding PauseLooping}" />
+                </StackPanel>
+            </nina:SequenceBlockView.SequenceItemContent>
+        </nina:SequenceBlockView>
+    </DataTemplate>
+
+    <DataTemplate x:Key="nina.plugin.phd2tools.Phd2ToolsSequenceItems.Phd2PauseGuidingInstruction_Mini">
+        <mini:MiniSequenceItem>
+            <mini:MiniSequenceItem.SequenceItemContent>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="PauseLooping=" />
+                    <TextBlock VerticalAlignment="Center" Text="{Binding PauseLooping}" />
+                </StackPanel>
+            </mini:MiniSequenceItem.SequenceItemContent>
+        </mini:MiniSequenceItem>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:Phd2ResumeGuidingInstruction}">
+        <nina:SequenceBlockView>
+            <nina:SequenceBlockView.SequenceItemContent>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Reacquire Lock" />
+                    <CheckBox
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding ReacquireLock}" />
+                    <TextBlock
+                        Margin="15,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="Fallback FindStar" />
+                    <CheckBox
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding FallbackToFindStar}" />
+                </StackPanel>
+            </nina:SequenceBlockView.SequenceItemContent>
+        </nina:SequenceBlockView>
+    </DataTemplate>
+
+    <DataTemplate x:Key="nina.plugin.phd2tools.Phd2ToolsSequenceItems.Phd2ResumeGuidingInstruction_Mini">
+        <mini:MiniSequenceItem>
+            <mini:MiniSequenceItem.SequenceItemContent>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Reacquire=" />
+                    <TextBlock VerticalAlignment="Center" Text="{Binding ReacquireLock}" />
+                    <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Text="Fallback=" />
+                    <TextBlock VerticalAlignment="Center" Text="{Binding FallbackToFindStar}" />
+                </StackPanel>
+            </mini:MiniSequenceItem.SequenceItemContent>
+        </mini:MiniSequenceItem>
+    </DataTemplate>
+
 </ResourceDictionary>

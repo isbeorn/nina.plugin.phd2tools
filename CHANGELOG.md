@@ -1,5 +1,9 @@
 ﻿# Phd2 Tools
 
+## 1.1.0.0
+- Added new instruction "PHD2 Pause Guiding". Wraps the PHD2 server `set_paused` method to pause guide corrections without losing the lock position. Optional `PauseLooping` flag also pauses the looping exposures.
+- Added new instruction "PHD2 Resume Guiding". Wraps `set_paused(false)`. With `ReacquireLock=true` (default), the instruction first reads the current lock position via `get_lock_position` and then writes it back via `set_lock_position(x, y, EXACT=false)`. PHD2 then searches for the (mechanically-shifted) star near the previous lock and updates the lock to its actual coordinates. Eliminates spike on resume after focuser-induced shifts at filter changes. Includes optional `find_star` fallback if the lock position has been lost during the pause.
+
 ## 1.0.6.0
 - Reworked the dock panel to keep a single tcp connection open to PhD2 instead of opening a new one on every request. This should improve performance and reliability.
 
